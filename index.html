@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRIMAL – Unfiltered Living</title>
+  <meta name="description" content="PRIMAL streetwear – trendy clothes crafted for freedom.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+ 
+  <div id="navbar-placeholder"></div>
+ 
+  <main>
+ 
+    <section class="hero" aria-label="Hero banner">
+ 
+      <div class="hero__main">
+        <img
+          src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=900&q=80"
+          alt="PRIMAL – Unfiltered Living streetwear lifestyle"
+          loading="eager"
+        >
+        <div class="hero__main-text">
+          <h1>Unfiltered Living.</h1>
+          <p>Trendy clothes crafted for freedom</p>
+        </div>
+      </div>
+ 
+      
+      <div class="hero__banners">
+    
+        <a href="shop.html" class="hero__banner" aria-label="Summer Sale – view products">
+          <img
+            src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&q=80"
+            alt="Summer Sale banner"
+            loading="eager"
+          >
+          <div class="hero__banner-label">
+            Summer Sale
+            <span class="arrow">→</span>
+          </div>
+        </a>
+ 
+        <a href="shop.html" class="hero__banner" aria-label="New drop – view products">
+          <img
+            src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=500&q=80"
+            alt="New drop banner"
+            loading="eager"
+          >
+          <div class="hero__banner-label">
+            New drop
+            <span class="arrow">→</span>
+          </div>
+        </a>
+      </div>
+ 
+    </section>
+
+    <section class="best-sellers" aria-label="Best sellers">
+      <div class="section-header">
+        <div>
+          <h2>Our best-sellers</h2>
+          <p>View all the items popular with the audience</p>
+        </div>
+        <a href="shop.html" class="section-header__link">View all products</a>
+      </div>
+ 
+      <div class="product-grid" id="bestsellers-grid" aria-label="Best-seller products">
+        
+      </div>
+    </section>
+ 
+  </main>
+ 
+  
+  <div id="footer-placeholder"></div>
+ 
+  
+  <script src="script.js"></script>
+  <script src="components.js"></script>
+  <script>
+  
+    document.addEventListener('DOMContentLoaded', async () => {
+      injectNavbar('home');
+      injectFooter();
+ 
+      updateNavAuth();
+      updateCartBadge();
+      initMobileMenu();
+
+      const products = await loadAllProducts();
+      const grid = document.getElementById('bestsellers-grid');
+ 
+      const bestSellers = products.slice(0, 4);
+      bestSellers.forEach(product => {
+        grid.appendChild(createProductCard(product));
+      });
+    });
+  </script>
+ 
+</body>
+</html>
+ 

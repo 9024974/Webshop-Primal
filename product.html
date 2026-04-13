@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product – PRIMAL</title>
+  <meta name="description" content="Product detail page – PRIMAL streetwear.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <main>
+    <section class="product-detail" id="product-detail" aria-label="Product detail">
+      <p style="padding:40px;color:#999;">Loading product...</p>
+    </section>
+  </main>
+ 
+  <div id="footer-placeholder"></div>
+ 
+  <script src="script.js"></script>
+  <script src="components.js"></script>
+  <script>
+ 
+    let currentProduct = null;  
+    let selectedSize = null;    
+ 
+    function selectThumb(index, images) {
+      document.getElementById('main-product-img').src = images[index];
+      document.querySelectorAll('.thumb-item').forEach((el, i) => {
+        el.classList.toggle('active', i === index);
+      });
+    }
+
+    function selectSize(size) {
+      selectedSize = size;
+      document.querySelectorAll('.size-btn').forEach(btn => {
+        btn.classList.toggle('selected', btn.dataset.size === size);
+      });
+    }
+ 
+    function handleAddToCart() {
+      if (!selectedSize) {
+        showToast('Please select a size first.');
+        return;
+      }
+      addToCart(currentProduct, selectedSize);
+      showToast(`${currentProduct.name} (${selectedSize}) added to cart!`);
+    }
+ 
+    function getProductImages(product) {
+      const base = product.image.split('?')[0];
+      return [
+        `${base}?w=600&q=80`,
+        `${base}?w=600&q=75&crop=top`,
+        `${base}?w=600&q=70&crop=center`,
+        `${base}?w=600&q=65&crop=bottom`
+      ];
+    }
+ 
+    function renderProductDetail(product) {
+      currentProduct = product;
+      const detail = document.getElementById('product-detail');
+      const images = getProductImages(product);
+ 
+      detail.innerHTML = `
+        <!-- Thumbnail column -->
+        <div class="product-detail__thumbs" role="list" aria-label="Product image thumbnails">
+          ${images.map((img, i) => `
+            <div class="thumb-item ${i === 0 ? 'active' : ''}" role="listitem"
+                 onclick="selectThumb(${i}, ${JSON.stringify(images)})"
+                 aria-label="Product thumbnail ${i + 1}">
+              <img src="${img}" alt="${product.name} thumbnail ${i + 1}" loading="lazy"
+                   onerror="this.src='https://placehold.co/100x100/f5f5f5/999?text=IMG'">
+            </div>
+          `).join('')}
+        </div>
+ 
+        <!-- Main product image -->
+        <div class="product-detail__main-img">
+          <img id="main-product-img"
+               src="${images[0]}"
+               alt="${product.name} – ${product.color}"
+               onerror="this.src='https://placehold.co/600x520/f5f5f5/999?text=No+Image'">
+        </div>
+ 
+        <!-- Product info: name, description, price, sizes, add to cart -->
+        <div class="product-detail__info">
+          <!-- Product name -->
+          <h1>${product.name} – ${product.color}</h1>
+ 
+          <!-- Description -->
+          <p class="description">${product.description}</p>
+ 
+          <!-- Price -->
+          <div class="product-detail__price" aria-label="Price: €${product.price}">${product.price}</div>
+ 
+          <!-- Size selector -->
+          <p class="size-label">Size</p>
+          <div class="size-options" role="group" aria-label="Select size">
+            ${product.sizes.map(size => `
+              <button class="size-btn"
+                      data-size="${size}"
+                      onclick="selectSize('${size}')"
+                      aria-label="Size ${size}">
+                ${size}
+              </button>
+            `).join('')}
+          </div>
+ 
+          <!-- Add to cart button -->
+          <button class="btn-add-to-cart" onclick="handleAddToCart()" aria-label="Add ${product.name} to cart">
+            ADD TO CART
+            <!-- Cart icon -->
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+          </button>
+        </div>
+      `;
+ 
+      document.title = `${product.name} – PRIMAL`;
+    }
+ 
+    document.addEventListener('DOMContentLoaded', async () => {
+      injectNavbar('shop');
+      injectFooter();
+      updateNavAuth();
+      updateCartBadge();
+      initMobileMenu();
+ 
+      const params = new URLSearchParams(window.location.search);
+      const productId = parseInt(params.get('id'));
+ 
+      if (!productId) {
+        window.location.href = 'shop.html';
+        return;
+      }
+ 
+      const products = await loadAllProducts();
+      const product = products.find(p => p.id === productId);
+ 
+      if (!product) {
+        document.getElementById('product-detail').innerHTML =
+          '<p style="padding:40px;color:#999;">Product not found. <a href="shop.html">Back to shop</a></p>';
+        return;
+      }
+
+      renderProductDetail(product);
+    });
+  </script>
+ 
+</body>
+</html>
