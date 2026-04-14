@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop – PRIMAL</title>
+  <meta name="description" content="Browse all 12 PRIMAL streetwear products.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <main>
+ 
+    <section class="shop-hero" aria-label="Shop banner">
+      <img
+        src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&q=80"
+        alt="PRIMAL – Our product line"
+        loading="eager"
+      >
+      <div class="shop-hero__text">
+        <h1>Our product line</h1>
+      </div>
+    </section>
+
+    <div class="shop-controls">
+      <p class="shop-controls__count" id="item-count">12 items showing</p>
+ 
+      <div class="shop-controls__sort" role="group" aria-label="Sort products">
+        <button class="sort-btn active" id="btn-newest" onclick="sortProducts('newest')">
+          Newest to Latest
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+        </button>
+        <button class="sort-btn" id="btn-oldest" onclick="sortProducts('oldest')">
+          Latest to Newest
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <section class="shop-products" aria-label="All products">
+      <div class="product-grid product-grid--3" id="shop-grid">
+      </div>
+    </section>
+ 
+  </main>
+ 
+  <div id="footer-placeholder"></div>
+ 
+  <script src="script.js"></script>
+  <script src="components.js"></script>
+  <script>
+    let allProducts = [];        
+    let currentSort = 'newest'; 
+ 
+    function renderProducts(products) {
+      const grid = document.getElementById('shop-grid');
+      grid.innerHTML = ''; 
+ 
+      products.forEach(product => {
+        grid.appendChild(createProductCard(product));
+      });
+
+      document.getElementById('item-count').textContent = `${products.length} items showing`;
+    }
+
+    function sortProducts(order) {
+      currentSort = order;
+ 
+      document.getElementById('btn-newest').classList.toggle('active', order === 'newest');
+      document.getElementById('btn-oldest').classList.toggle('active', order === 'oldest');
+      
+      const sorted = [...allProducts].sort((a, b) => {
+        return order === 'newest'
+          ? a.addedAt - b.addedAt   
+          : b.addedAt - a.addedAt;  
+      });
+ 
+      renderProducts(sorted);
+    }
+ 
+    document.addEventListener('DOMContentLoaded', async () => {
+      injectNavbar('shop');
+      injectFooter();
+ 
+      updateNavAuth();
+      updateCartBadge();
+      initMobileMenu();
+
+      allProducts = await loadAllProducts();
+
+      sortProducts('newest');
+    });
+  </script>
+ 
+</body>
+</html>
+ 

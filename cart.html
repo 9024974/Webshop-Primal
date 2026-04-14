@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart – PRIMAL</title>
+  <meta name="description" content="Your PRIMAL shopping cart.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+ 
+  <main>
+    <div class="cart-page">
+      <h1>Shopping Cart</h1>
+      <div class="cart-table">
+        <div class="cart-table__header" role="row">
+          <span>Item</span>
+          <span>Qty</span>
+          <span>Subtotal</span>
+          <span></span>
+        </div>
+
+        <div id="cart-items">
+        </div>
+        <a href="shop.html" class="btn-continue" aria-label="Continue shopping">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Continue Shopping
+        </a>
+      </div>
+ 
+      <div class="cart-summary" aria-label="Order summary">
+        <h2>Summary</h2>
+
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="summary-subtotal">€0,00</span>
+        </div>
+
+        <div class="summary-row">
+          <span>Shipping Cost</span>
+          <span>€5,00</span>
+        </div>
+ 
+        <div class="summary-row total">
+          <span>Total</span>
+          <span id="summary-total">€5,00</span>
+        </div>
+ 
+        <button class="btn-checkout" onclick="showToast('Checkout coming soon!')">
+          Checkout
+        </button>
+      </div>
+ 
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+ 
+  <script src="script.js"></script>
+  <script src="components.js"></script>
+  <script>
+ 
+    const SHIPPING_COST = 5; 
+ 
+    function formatPrice(amount) {
+      return `€${amount.toFixed(2).replace('.', ',')}`;
+    }
+ 
+    function renderCart() {
+      const cart = getCart();
+      const container = document.getElementById('cart-items');
+      container.innerHTML = '';
+ 
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="cart-empty">
+            <p>Your cart is empty.</p>
+            <a href="shop.html" style="color:var(--primary);font-weight:600;text-decoration:underline;">Browse products</a>
+          </div>
+        `;
+        document.getElementById('summary-subtotal').textContent = '€0,00';
+        document.getElementById('summary-total').textContent = formatPrice(SHIPPING_COST);
+        return;
+      }
+
+      let subtotal = 0;
+ 
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.qty;
+        subtotal += itemTotal;
+ 
+        const row = document.createElement('div');
+        row.className = 'cart-item';
+        row.setAttribute('role', 'row');
+        row.innerHTML = `
+          <!-- Product thumbnail -->
+          <div class="cart-item__img">
+            <img src="${item.image}" alt="${item.name}" loading="lazy"
+                 onerror="this.src='https://placehold.co/90x90/f5f5f5/999?text=IMG'">
+          </div>
+ 
+          <!-- Product name + size -->
+          <div>
+            <p class="cart-item__name">${item.name}${item.color ? ' – ' + item.color : ''}</p>
+            <p class="cart-item__size">Size ${item.size}</p>
+          </div>
+ 
+          <!-- Quantity -->
+          <div class="cart-item__qty" aria-label="Quantity: ${item.qty}">${item.qty}</div>
+ 
+          <!-- Subtotal per item -->
+          <div class="cart-item__price" aria-label="Subtotal: €${itemTotal}">€${itemTotal}</div>
+ 
+          <!-- Remove button -->
+          <button class="cart-item__remove" onclick="handleRemoveItem(${index})" aria-label="Remove ${item.name} from cart">
+            ×
+          </button>
+        `;
+        container.appendChild(row);
+      });
+ 
+      const total = subtotal + SHIPPING_COST;
+      document.getElementById('summary-subtotal').textContent = formatPrice(subtotal);
+      document.getElementById('summary-total').textContent = formatPrice(total);
+    }
+ 
+    function handleRemoveItem(index) {
+      removeFromCart(index);
+      renderCart();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      injectNavbar('');
+      injectFooter();
+      updateNavAuth();
+      updateCartBadge();
+      initMobileMenu();
+ 
+      renderCart();
+    });
+  </script>
+ 
+</body>
+</html>
+ 
