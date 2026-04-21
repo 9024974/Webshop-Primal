@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Product – PRIMAL</title>
+<meta name="description" content="Add a new product to the PRIMAL webshop.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+  
+  <style>
+    #image-preview {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border: 1.5px solid var(--grey-mid);
+      border-radius: var(--border-radius);
+      margin-top: 10px;
+      display: none; 
+    }
+
+    #file-input {
+      display: none;
+    }
+
+    .image-upload-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 16px;
+      border: 1.5px solid var(--grey-mid);
+      border-radius: var(--border-radius);
+      font-size: 15px;
+      color: var(--grey-text);
+      cursor: pointer;
+      transition: border-color var(--transition);
+    }
+
+    .image-upload-label:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    #image-url-input {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <main>
+    <section class="add-product-page" aria-label="Add product form">
+      <div class="add-product-box">
+
+        <h1>Add product</h1>
+
+        <div class="form-group">
+          <label for="prod-name" class="form-label">Product name</label>
+          <input
+            type="text"
+            id="prod-name"
+            class="form-input"
+            placeholder="e.g. Star Hoodie"
+            aria-label="Product name"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="prod-desc" class="form-label">Product description</label>
+          <textarea
+            id="prod-desc"
+            class="form-input"
+            placeholder="Describe the product..."
+            aria-label="Product description"
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="prod-price" class="form-label">Product price in euros</label>
+          <input
+            type="number"
+            id="prod-price"
+            class="form-input"
+            placeholder="e.g. 69"
+            min="0"
+            step="1"
+            aria-label="Product price in euros"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Primary image</label>
+
+          <label for="file-input" class="image-upload-label">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            Add image
+          </label>
+          <input type="file" id="file-input" accept="image/*" onchange="handleFileSelect(event)">
+
+          <input
+            type="url"
+            id="image-url-input"
+            class="form-input"
+            placeholder="Or paste an image URL"
+            aria-label="Image URL"
+            oninput="handleUrlInput()"
+          >
+
+          <img id="image-preview" alt="Product image preview" src="">
+        </div>
+
+        <p class="auth-error" id="add-error" role="alert"></p>
+
+        <button class="btn-add-product" onclick="handleAddProduct()">
+          ADD PRODUCT
+        </button>
+
+        <p class="success-msg" id="add-success" role="status">
+          Product added successfully! Redirecting to shop...
+        </p>
+
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="script.js"></script>
+  <script src="components.js"></script>
+  <script>
+    let uploadedImageData = null;
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        uploadedImageData = e.target.result; 
+        showImagePreview(uploadedImageData);
+        document.getElementById('image-url-input').value = '';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleUrlInput() {
+      const url = document.getElementById('image-url-input').value.trim();
+      if (url) {
+        uploadedImageData = url;
+        showImagePreview(url);
+      } else {
+        uploadedImageData = null;
+        document.getElementById('image-preview').style.display = 'none';
+      }
+    }
+
+    function showImagePreview(src) {
+      const preview = document.getElementById('image-preview');
+      preview.src = src;
+      preview.style.display = 'block';
+      preview.onerror = () => {
+        preview.style.display = 'none';
+        showToast('Could not load image. Please check the URL.');
+      };
+    }
+
+    function handleAddProduct() {
+      const name = document.getElementById('prod-name').value.trim();
+      const description = document.getElementById('prod-desc').value.trim();
+      const priceRaw = document.getElementById('prod-price').value;
+      const errorEl = document.getElementById('add-error');
+      const successEl = document.getElementById('add-success');
+
+      errorEl.classList.remove('visible');
+      successEl.classList.remove('visible');
+
+      if (!name) {
+        errorEl.textContent = 'Please enter a product name.';
+        errorEl.classList.add('visible');
+        return;
+      }
+
+      if (!description) {
+        errorEl.textContent = 'Please enter a product description.';
+        errorEl.classList.add('visible');
+        return;
+      }
+
+      const price = parseFloat(priceRaw);
+      if (!priceRaw || isNaN(price) || price <= 0) {
+        errorEl.textContent = 'Please enter a valid price.';
+        errorEl.classList.add('visible');
+        return;
+      }
+
+      const image = uploadedImageData ||
+        `https://placehold.co/600x800/f5f5f5/999?text=${encodeURIComponent(name)}`;
+
+      const userProducts = lsGet('primal_user_products', []);
+
+      const allIds = [
+        ...userProducts.map(p => p.id),
+        100 
+      ];
+      const newId = Math.max(...allIds) + 1;
+
+      const newProduct = {
+        id: newId,
+        name: name,
+        color: '',
+        price: price,
+        image: image,
+        description: description,
+        category: 'other',
+        sizes: ['S', 'M', 'L', 'XL'],
+        addedAt: Date.now() // 
+      };
+
+      userProducts.push(newProduct);
+      lsSet('primal_user_products', userProducts);
+
+      successEl.classList.add('visible');
+      setTimeout(() => {
+        window.location.href = 'shop.html';
+      }, 1500);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      injectNavbar('');
+      injectFooter();
+      updateNavAuth();
+      updateCartBadge();
+      initMobileMenu();
+
+      if (!getCurrentUser()) {
+        window.location.href = 'login.html';
+      }
+    });
+  </script>
+
+</body>
+</html>

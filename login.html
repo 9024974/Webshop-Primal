@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login – PRIMAL</title>
+<meta name="description" content="Login to your PRIMAL account.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="navbar-placeholder"></div>
+
+  <main>
+    <section class="auth-page" aria-label="Login form">
+      <div class="auth-box">
+
+        <h1>Login</h1>
+        <p>Enter your email and password to login</p>
+
+        <input
+          type="email"
+          id="login-email"
+          class="auth-field"
+          placeholder="Email"
+          autocomplete="email"
+          aria-label="Email address"
+          required
+        >
+
+        <input
+          type="password"
+          id="login-password"
+          class="auth-field"
+          placeholder="Password"
+          autocomplete="current-password"
+          aria-label="Password"
+          required
+        >
+
+        <p class="auth-error" id="login-error" role="alert"></p>
+
+        <button class="btn-auth" onclick="handleLogin()">LOGIN</button>
+
+        <p class="auth-switch">
+          Don't have an account? <a href="signup.html">Sing up</a>
+        </p>
+
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="script.js"></script>
+  <script src="components.js"></script>
+  <script>
+    function handleLogin() {
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const errorEl = document.getElementById('login-error');
+
+      errorEl.classList.remove('visible');
+
+      if (!email || !password) {
+        errorEl.textContent = 'Please fill in all fields.';
+        errorEl.classList.add('visible');
+        return;
+      }
+
+      const users = lsGet('primal_users', []);
+
+      const user = users.find(u => u.email === email && u.password === password);
+
+      if (!user) {
+        errorEl.textContent = 'Incorrect email or password. Please try again.';
+        errorEl.classList.add('visible');
+        return;
+      }
+
+      lsSet('primal_current_user', email);
+
+      window.location.href = 'index.html';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleLogin();
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      injectNavbar('login');
+      injectFooter();
+      updateNavAuth();
+      updateCartBadge();
+      initMobileMenu();
+
+      if (getCurrentUser()) {
+        window.location.href = 'index.html';
+      }
+    });
+  </script>
+
+</body>
+</html>
