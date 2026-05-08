@@ -1,134 +1,63 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Add Product – PRIMAL</title>
-<meta name="description" content="Add a new product to the PRIMAL webshop.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-
-  
-  <style>
-    #image-preview {
-      width: 120px;
-      height: 120px;
-      object-fit: cover;
-      border: 1.5px solid var(--grey-mid);
-      border-radius: var(--border-radius);
-      margin-top: 10px;
-      display: none; 
-    }
-
-    #file-input {
-      display: none;
-    }
-
-    .image-upload-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      width: 100%;
-      padding: 16px;
-      border: 1.5px solid var(--grey-mid);
-      border-radius: var(--border-radius);
-      font-size: 15px;
-      color: var(--grey-text);
-      cursor: pointer;
-      transition: border-color var(--transition);
-    }
-
-    .image-upload-label:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    #image-url-input {
-      margin-top: 10px;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Product – PRIMAL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <div id="navbar-placeholder"></div>
 
   <main>
-    <section class="add-product-page" aria-label="Add product form">
-      <div class="add-product-box">
+    <section class="addprod-page" aria-label="Product toevoegen">
+      <div class="addprod-box">
 
         <h1>Add product</h1>
 
         <div class="form-group">
           <label for="prod-name" class="form-label">Product name</label>
-          <input
-            type="text"
-            id="prod-name"
-            class="form-input"
-            placeholder="e.g. Star Hoodie"
-            aria-label="Product name"
-            required
-          >
+          <input type="text" id="prod-name" class="form-input" placeholder="bijv. Star Hoodie" aria-label="Productnaam" required>
         </div>
 
         <div class="form-group">
           <label for="prod-desc" class="form-label">Product description</label>
-          <textarea
-            id="prod-desc"
-            class="form-input"
-            placeholder="Describe the product..."
-            aria-label="Product description"
-            required
-          ></textarea>
+          <textarea id="prod-desc" class="form-input" placeholder="Omschrijf het product..." aria-label="Productomschrijving" required></textarea>
         </div>
 
         <div class="form-group">
           <label for="prod-price" class="form-label">Product price in euros</label>
-          <input
-            type="number"
-            id="prod-price"
-            class="form-input"
-            placeholder="e.g. 69"
-            min="0"
-            step="1"
-            aria-label="Product price in euros"
-            required
-          >
+          <input type="number" id="prod-price" class="form-input" placeholder="bijv. 69" min="1" step="1" aria-label="Prijs in euro" required>
         </div>
 
         <div class="form-group">
           <label class="form-label">Primary image</label>
 
-          <label for="file-input" class="image-upload-label">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <label for="file-input" class="img-upload-label">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
               <polyline points="21 15 16 10 5 21"/>
             </svg>
             Add image
           </label>
-          <input type="file" id="file-input" accept="image/*" onchange="handleFileSelect(event)">
+          <input type="file" id="file-input" accept="image/*" onchange="onFileSelect(event)">
 
-          <input
-            type="url"
-            id="image-url-input"
-            class="form-input"
-            placeholder="Or paste an image URL"
-            aria-label="Image URL"
-            oninput="handleUrlInput()"
-          >
+          <input type="url" id="img-url" class="form-input img-url-input"
+                 placeholder="Of plak een afbeelding-URL"
+                 aria-label="Afbeelding URL"
+                 oninput="onUrlInput()">
 
-          <img id="image-preview" alt="Product image preview" src="">
+          <img id="img-preview" src="" alt="Voorvertoning afbeelding">
         </div>
 
-        <p class="auth-error" id="add-error" role="alert"></p>
+        <p class="form-err" id="form-err" role="alert"></p>
 
-        <button class="btn-add-product" onclick="handleAddProduct()">
-          ADD PRODUCT
-        </button>
+        <button class="btn-addprod" onclick="handleAddProduct()">ADD PRODUCT</button>
 
-        <p class="success-msg" id="add-success" role="status">
-          Product added successfully! Redirecting to shop...
-        </p>
+        <p class="form-ok" id="form-ok" role="status">Product succesvol toegevoegd! Je wordt doorgestuurd naar de shop...</p>
 
       </div>
     </section>
@@ -139,101 +68,71 @@
   <script src="script.js"></script>
   <script src="components.js"></script>
   <script>
-    let uploadedImageData = null;
+    let imageData = null; 
 
-    function handleFileSelect(event) {
-      const file = event.target.files[0];
+    function onFileSelect(e) {
+      const file = e.target.files[0];
       if (!file) return;
-
       const reader = new FileReader();
-      reader.onload = (e) => {
-        uploadedImageData = e.target.result; 
-        showImagePreview(uploadedImageData);
-        document.getElementById('image-url-input').value = '';
+      reader.onload = ev => {
+        imageData = ev.target.result;
+        showPreview(imageData);
+        document.getElementById('img-url').value = '';
       };
       reader.readAsDataURL(file);
     }
 
-    function handleUrlInput() {
-      const url = document.getElementById('image-url-input').value.trim();
-      if (url) {
-        uploadedImageData = url;
-        showImagePreview(url);
-      } else {
-        uploadedImageData = null;
-        document.getElementById('image-preview').style.display = 'none';
-      }
+    function onUrlInput() {
+      const url = document.getElementById('img-url').value.trim();
+      imageData = url || null;
+      if (url) showPreview(url);
+      else document.getElementById('img-preview').style.display = 'none';
     }
 
-    function showImagePreview(src) {
-      const preview = document.getElementById('image-preview');
-      preview.src = src;
-      preview.style.display = 'block';
-      preview.onerror = () => {
-        preview.style.display = 'none';
-        showToast('Could not load image. Please check the URL.');
-      };
+    function showPreview(src) {
+      const el = document.getElementById('img-preview');
+      el.src = src;
+      el.style.display = 'block';
+      el.onerror = () => { el.style.display = 'none'; showToast('Afbeelding kon niet worden geladen.'); };
     }
 
     function handleAddProduct() {
-      const name = document.getElementById('prod-name').value.trim();
-      const description = document.getElementById('prod-desc').value.trim();
-      const priceRaw = document.getElementById('prod-price').value;
-      const errorEl = document.getElementById('add-error');
-      const successEl = document.getElementById('add-success');
+      const name  = document.getElementById('prod-name').value.trim();
+      const desc  = document.getElementById('prod-desc').value.trim();
+      const price = parseFloat(document.getElementById('prod-price').value);
+      const errEl = document.getElementById('form-err');
+      const okEl  = document.getElementById('form-ok');
 
-      errorEl.classList.remove('visible');
-      successEl.classList.remove('visible');
+      errEl.classList.remove('show');
+      okEl.classList.remove('show');
 
-      if (!name) {
-        errorEl.textContent = 'Please enter a product name.';
-        errorEl.classList.add('visible');
-        return;
-      }
+      if (!name)             { errEl.textContent = 'Voer een productnaam in.';   errEl.classList.add('show'); return; }
+      if (!desc)             { errEl.textContent = 'Voer een omschrijving in.'; errEl.classList.add('show'); return; }
+      if (!price || price<1) { errEl.textContent = 'Voer een geldige prijs in.'; errEl.classList.add('show'); return; }
 
-      if (!description) {
-        errorEl.textContent = 'Please enter a product description.';
-        errorEl.classList.add('visible');
-        return;
-      }
+      const image = imageData ||
+        `https://placehold.co/600x800/f5f5f5/aaa?text=${encodeURIComponent(name)}`;
 
-      const price = parseFloat(priceRaw);
-      if (!priceRaw || isNaN(price) || price <= 0) {
-        errorEl.textContent = 'Please enter a valid price.';
-        errorEl.classList.add('visible');
-        return;
-      }
+      const userProds = lsGet('primal_user_products', []);
+      const maxId     = userProds.reduce((m, p) => Math.max(m, p.id), 100);
 
-      const image = uploadedImageData ||
-        `https://placehold.co/600x800/f5f5f5/999?text=${encodeURIComponent(name)}`;
-
-      const userProducts = lsGet('primal_user_products', []);
-
-      const allIds = [
-        ...userProducts.map(p => p.id),
-        100 
-      ];
-      const newId = Math.max(...allIds) + 1;
-
-      const newProduct = {
-        id: newId,
-        name: name,
-        color: '',
-        price: price,
-        image: image,
-        description: description,
-        category: 'other',
-        sizes: ['S', 'M', 'L', 'XL'],
-        addedAt: Date.now() // 
+      const newProd = {
+        id:          maxId + 1,
+        name:        name,
+        color:       '',
+        price:       price,
+        image:       image,
+        description: desc,
+        category:    'other',
+        sizes:       ['S', 'M', 'L', 'XL'],
+        addedAt:     Date.now() 
       };
 
-      userProducts.push(newProduct);
-      lsSet('primal_user_products', userProducts);
+      userProds.push(newProd);
+      lsSet('primal_user_products', userProds);
 
-      successEl.classList.add('visible');
-      setTimeout(() => {
-        window.location.href = 'shop.html';
-      }, 1500);
+      okEl.classList.add('show');
+      setTimeout(() => { window.location.href = 'shop.html'; }, 1500);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -248,6 +147,5 @@
       }
     });
   </script>
-
 </body>
 </html>

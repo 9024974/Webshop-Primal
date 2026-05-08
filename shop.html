@@ -1,101 +1,111 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shop – PRIMAL</title>
-<meta name="description" content="Browse all 12 PRIMAL streetwear products.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop – PRIMAL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <div id="navbar-placeholder"></div>
 
   <main>
- 
-    <section class="shop-hero" aria-label="Shop banner">
+
+    <section class="shop-banner" aria-label="Shop banner">
       <img
         src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&q=80"
         alt="PRIMAL – Our product line"
         loading="eager"
       >
-      <div class="shop-hero__text">
+      <div class="shop-banner__text">
         <h1>Our product line</h1>
       </div>
     </section>
 
-    <div class="shop-controls">
-      <p class="shop-controls__count" id="item-count">12 items showing</p>
- 
-      <div class="shop-controls__sort" role="group" aria-label="Sort products">
+    <div class="shop-bar">
+      <p class="shop-bar__count" id="item-count">12 items showing</p>
+
+      <div class="shop-bar__sort" role="group" aria-label="Sorteren">
         <button class="sort-btn active" id="btn-newest" onclick="sortProducts('newest')">
           Newest to Latest
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
         </button>
         <button class="sort-btn" id="btn-oldest" onclick="sortProducts('oldest')">
           Latest to Newest
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
       </div>
     </div>
 
-    <section class="shop-products" aria-label="All products">
-      <div class="product-grid product-grid--3" id="shop-grid">
+    <section class="shop-grid-wrap" aria-label="Alle producten">
+      <div class="product-grid" id="shop-grid">
       </div>
     </section>
- 
+
   </main>
- 
+
   <div id="footer-placeholder"></div>
- 
+
   <script src="script.js"></script>
   <script src="components.js"></script>
   <script>
-    let allProducts = [];        
-    let currentSort = 'newest'; 
- 
+    let allProducts = [];
+    let currentSort = 'newest';
+
     function renderProducts(products) {
       const grid = document.getElementById('shop-grid');
-      grid.innerHTML = ''; 
- 
-      products.forEach(product => {
-        grid.appendChild(createProductCard(product));
-      });
-
+      grid.innerHTML = '';
+      products.forEach(p => grid.appendChild(createProductCard(p)));
       document.getElementById('item-count').textContent = `${products.length} items showing`;
     }
 
     function sortProducts(order) {
       currentSort = order;
- 
       document.getElementById('btn-newest').classList.toggle('active', order === 'newest');
       document.getElementById('btn-oldest').classList.toggle('active', order === 'oldest');
-      
-      const sorted = [...allProducts].sort((a, b) => {
-        return order === 'newest'
-          ? a.addedAt - b.addedAt   
-          : b.addedAt - a.addedAt;  
-      });
- 
+      const sorted = [...allProducts].sort((a, b) =>
+        order === 'newest' ? a.addedAt - b.addedAt : b.addedAt - a.addedAt
+      );
       renderProducts(sorted);
     }
- 
+
+    const FALLBACK_PRODUCTS = [
+      { id:1,  name:"Star Hoodie",        color:"Blue",              price:69, image:"images/star-hoodie-blue.png",           addedAt:1  },
+      { id:2,  name:"Frosted Shorts",     color:"Light Blue",        price:59, image:"images/frosted-shorts-light-blue.png",  addedAt:2  },
+      { id:3,  name:"Panels Tee",         color:"Green & Yellow",    price:49, image:"images/panels-tee-green-yellow.png",    addedAt:3  },
+      { id:4,  name:"Cold Tee",           color:"Ash Grey",          price:49, image:"images/cold-tee-ash-grey.png",          addedAt:4  },
+      { id:5,  name:"Lovers Pool Hoodie", color:"Brown",             price:79, image:"images/lovers-pool-hoodie-brown.png",   addedAt:5  },
+      { id:6,  name:"Cult Star Tee",      color:"Heavy Grey",        price:49, image:"images/cult-star-tee-heavy-grey.png",   addedAt:6  },
+      { id:7,  name:"Pool Knit",          color:"Black",             price:69, image:"images/pool-knit-black.png",            addedAt:7  },
+      { id:8,  name:"Wind Shorts",        color:"Marine Blue",       price:59, image:"images/wind-shorts-1.png",              addedAt:8  },
+      { id:9,  name:"One Pocket Shirt",   color:"Blurred Green",     price:69, image:"images/one-pocket-shirt-blurred-green.png", addedAt:9  },
+      { id:10, name:"Polo Iron",          color:"Light Blue and Grey",price:59, image:"images/polo-iron-light-blue-grey.png", addedAt:10 },
+      { id:11, name:"Neotribal Pants",    color:"Light Blue",        price:89, image:"images/neotribal-pants-light-blue.png", addedAt:11 },
+      { id:12, name:"Lolly Half Stripes", color:"Red & White",       price:49, image:"images/lolly-half-stripes-red-white.png", addedAt:12 }
+    ];
+
     document.addEventListener('DOMContentLoaded', async () => {
       injectNavbar('shop');
       injectFooter();
- 
       updateNavAuth();
       updateCartBadge();
+      setActiveNav();
       initMobileMenu();
 
-      allProducts = await loadAllProducts();
+      try {
+        allProducts = await loadAllProducts();
+        if (allProducts.length === 0) allProducts = FALLBACK_PRODUCTS;
+      } catch (e) {
+        allProducts = FALLBACK_PRODUCTS;
+      }
+      const userProds = lsGet('primal_user_products', []);
+      allProducts = [...allProducts, ...userProds];
 
       sortProducts('newest');
     });
   </script>
- 
 </body>
 </html>
- 

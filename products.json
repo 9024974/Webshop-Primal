@@ -1,0 +1,140 @@
+[
+  {
+    "id": 1,
+    "name": "Star Hoodie",
+    "color": "Blue",
+    "price": 69,
+    "image": "images/star-hoodie-blue.png",
+    "description": "Make a statement with the Star Hoodie in bold blue. Heavyweight fleece construction with signature graphic detailing for authentic streetwear presence.",
+    "category": "hoodie",
+    "sizes": ["S", "M", "L", "XL"],
+    "addedAt": 1
+  },
+  {
+    "id": 2,
+    "name": "Frosted Shorts",
+    "color": "Light Blue",
+    "price": 59,
+    "image": "images/frosted-shorts-light-blue.png",
+    "description": "Light and breezy Frosted Shorts in cool light blue denim. Relaxed fit with a clean silhouette perfect for warm weather streetwear.",
+    "category": "shorts",
+    "sizes": ["S", "M", "L", "XL"],
+    "addedAt": 2
+  },
+  {
+    "id": 3,
+    "name": "Panels Tee",
+    "color": "Green & Yellow",
+    "price": 49,
+    "image": "images/panels-tee-green-yellow.png",
+    "description": "Turn heads with the Panels Tee in vivid green and yellow. Color-blocked design with premium cotton for a fresh, energetic look.",
+    "category": "tee",
+    "sizes": ["S", "M", "L", "XL"],
+    "addedAt": 3
+  },
+  {
+    "id": 4,
+    "name": "Cold Tee",
+    "color": "Ash Grey",
+    "price": 49,
+    "image": "images/cold-tee-ash-grey.png",
+    "description": "The Cold Tee in ash grey brings understated cool. Heavyweight cotton with a relaxed drop shoulder fit and subtle back graphic.",
+    "category": "tee",
+    "sizes": ["S", "M", "L", "XL"],
+    "addedAt": 4
+  },
+  {
+    "id": 5,
+    "name": "Lovers Pool Hoodie",
+    "color": "Brown",
+    "price": 79,
+    "image": "images/lovers-pool-hoodie-brown.png",
+    "description": "Cozy up in the Lovers Pool Hoodie in warm brown. Oversized silhouette with kangaroo pocket and embroidered chest logo.",
+    "category": "hoodie",
+    "sizes": ["S", "M", "L", "XL"],
+    "addedAt": 5
+  },
+  {
+    "id": 6,
+    "name": "Cult Star Tee",
+    "color": "Heavy Grey",
+    "price": 49,
+    "image": "images/cult-star-tee-heavy-grey.png",
+    "description": "The Cult Star Tee in heavy grey is built for those who move at their own pace. Ultra-thick cotton with a faded print for vintage character.",
+    "category": "tee",
+    "sizes": ["S", "M", "L", "XL"],
+    "addedAt": 6
+  },
+  {
+    "id": 7,
+    "name": "Pool Knit",
+    "color": "Black",
+    "price": 69,
+    "image": "images/pool-knit-black.png",
+    "description": "Versatile and bold, the Pool Knit in black features billiard ball embroidery and a relaxed fit. Layer it or wear it solo.",
+    "category": "knit",
+    "sizes": ["S", "M", "L", "XL"],
+    "addedAt": 7
+  },
+  {
+    "id": 8,
+    "name": "Wind Shorts",
+    "color": "Marine Blue",
+    "price": 59,
+    "image": "images/wind-shorts-marine-blue-front.png",
+    "images": [
+      "images/wind-shorts-marine-blue-back-only-jeans.png",
+      "images/wind-shorts-marine-blue-front-only-jeans.png",
+      "images/wind-shorts-marine-blue.png",
+      "images/wind-shorts-marine-blue-female.png"
+    ],
+    "description": "Stand out in these bold denim shorts with a striking back graphic and fresh streetwear vibe.",
+    "category": "shorts",
+    "sizes": ["S", "M", "L", "XL"],
+    "addedAt": 8
+  },
+  {
+    "id": 9,
+    "name": "One Pocket Shirt",
+    "color": "Blurred Green",
+    "price": 69,
+    "image": "images/one-pocket-shirt-blurred-green.png",
+    "description": "The One Pocket Shirt in blurred green brings texture and attitude. Plaid construction with an oversized fit and single chest pocket.",
+    "category": "shirt",
+    "sizes": ["S", "M", "L", "XL"],
+    "addedAt": 9
+  },
+  {
+    "id": 10,
+    "name": "Polo Iron",
+    "color": "Light Blue and Grey",
+    "price": 59,
+    "image": "images/polo-iron-light-blue-grey.png",
+    "description": "Classic meets street with the Polo Iron in light blue and grey. Structured collar and premium pique fabric for a clean, versatile style.",
+    "category": "polo",
+    "sizes": ["S", "M", "L", "XL"],
+    "addedAt": 10
+  },
+  {
+    "id": 11,
+    "name": "Neotribal Pants",
+    "color": "Light Blue",
+    "price": 89,
+    "image": "images/neotribal-pants-light-blue.png",
+    "description": "The Neotribal Pants in light blue redefine baggy denim. Wide leg cut with flame-inspired detailing on the leg for maximum street presence.",
+    "category": "pants",
+    "sizes": ["S", "M", "L", "XL"],
+    "addedAt": 11
+  },
+  {
+    "id": 12,
+    "name": "Lolly Half Stripes",
+    "color": "Red & White",
+    "price": 49,
+    "image": "images/lolly-half-stripes-red-white.png",
+    "description": "Bold and playful, the Lolly Half Stripes tee in red and white delivers retro energy with a modern streetwear twist.",
+    "category": "tee",
+    "sizes": ["S", "M", "L", "XL"],
+    "addedAt": 12
+  }
+]

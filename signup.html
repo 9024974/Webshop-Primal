@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sign Up – PRIMAL</title>
-<meta name="description" content="Create a new PRIMAL account.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -14,39 +13,20 @@
   <div id="navbar-placeholder"></div>
 
   <main>
-    <section class="auth-page" aria-label="Sign up form">
+    <section class="auth-page" aria-label="Registratieformulier">
       <div class="auth-box">
 
         <h1>Sign Up</h1>
         <p>Enter your email and password to sign up</p>
 
-        <input
-          type="email"
-          id="signup-email"
-          class="auth-field"
-          placeholder="Email"
-          autocomplete="email"
-          aria-label="Email address"
-          required
-        >
+        <input type="email"    id="email"    class="auth-input" placeholder="Email"    autocomplete="email"       aria-label="E-mailadres" required>
+        <input type="password" id="password" class="auth-input" placeholder="Password" autocomplete="new-password" aria-label="Wachtwoord"  required>
 
-        <input
-          type="password"
-          id="signup-password"
-          class="auth-field"
-          placeholder="Password"
-          autocomplete="new-password"
-          aria-label="Password"
-          required
-        >
-
-        <p class="auth-error" id="signup-error" role="alert"></p>
+        <p class="auth-err" id="err" role="alert"></p>
 
         <button class="btn-auth" onclick="handleSignUp()">SIGN UP</button>
 
-        <p class="auth-switch">
-          Already have an account? <a href="login.html">Login</a>
-        </p>
+        <p class="auth-switch">Already have an account? <a href="login.html">Login</a></p>
 
       </div>
     </section>
@@ -57,53 +37,45 @@
   <script src="script.js"></script>
   <script src="components.js"></script>
   <script>
-   
-    function handleSignUp() {
-      const email = document.getElementById('signup-email').value.trim();
-      const password = document.getElementById('signup-password').value;
-      const errorEl = document.getElementById('signup-error');
 
-      errorEl.classList.remove('visible');
+    function handleSignUp() {
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const err      = document.getElementById('err');
+      err.classList.remove('show');
 
       if (!email || !password) {
-        errorEl.textContent = 'Please fill in all fields.';
-        errorEl.classList.add('visible');
+        err.textContent = 'Vul alle velden in.';
+        err.classList.add('show');
         return;
       }
-
       if (!email.includes('@') || !email.includes('.')) {
-        errorEl.textContent = 'Please enter a valid email address.';
-        errorEl.classList.add('visible');
+        err.textContent = 'Voer een geldig e-mailadres in.';
+        err.classList.add('show');
         return;
       }
-
       if (password.length < 6) {
-        errorEl.textContent = 'Password must be at least 6 characters.';
-        errorEl.classList.add('visible');
+        err.textContent = 'Wachtwoord moet minimaal 6 tekens bevatten.';
+        err.classList.add('show');
         return;
       }
 
       const users = lsGet('primal_users', []);
 
-      const alreadyExists = users.some(u => u.email === email);
-      if (alreadyExists) {
-        errorEl.textContent = 'This email address is already registered.';
-        errorEl.classList.add('visible');
+      if (users.some(u => u.email === email)) {
+        err.textContent = 'Dit e-mailadres is al geregistreerd.';
+        err.classList.add('show');
         return;
       }
 
       users.push({ email, password });
       lsSet('primal_users', users);
 
-      showToast('Account created! Please log in.');
-      setTimeout(() => {
-        window.location.href = 'login.html';
-      }, 1000);
+      showToast('Account aangemaakt! Je wordt doorgestuurd naar de loginpagina.');
+      setTimeout(() => { window.location.href = 'login.html'; }, 1200);
     }
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') handleSignUp();
-    });
+    document.addEventListener('keydown', e => { if (e.key === 'Enter') handleSignUp(); });
 
     document.addEventListener('DOMContentLoaded', () => {
       injectNavbar('');
@@ -111,12 +83,8 @@
       updateNavAuth();
       updateCartBadge();
       initMobileMenu();
-
-      if (getCurrentUser()) {
-        window.location.href = 'index.html';
-      }
+      if (getCurrentUser()) window.location.href = 'index.html';
     });
   </script>
-
 </body>
 </html>
